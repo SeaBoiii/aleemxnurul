@@ -1,0 +1,23 @@
+{
+  "name": "Every Star Was You",
+  "short_name": "Every Star",
+  "description": "For Nurulain — every star was you.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#04121D",
+  "theme_color": "#04121D",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

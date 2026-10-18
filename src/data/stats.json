@@ -1,0 +1,83 @@
+{
+  "generatedAt": "2026-10-18T08:35:23.019Z",
+  "totalCommits": 121,
+  "projects": {
+    "confession": {
+      "commits": 3,
+      "firstCommit": "2026-06-22T17:21:04+08:00",
+      "lastCommit": "2026-08-30T17:06:35+08:00",
+      "daysActive": 69,
+      "source": "local"
+    },
+    "for_her": {
+      "commits": 10,
+      "firstCommit": "2026-06-24T10:11:43+08:00",
+      "lastCommit": "2026-10-13T23:35:45+08:00",
+      "daysActive": 112,
+      "source": "local"
+    },
+    "rsvp": {
+      "commits": 5,
+      "firstCommit": "2026-07-10T11:07:50+08:00",
+      "lastCommit": "2026-07-27T17:53:30+08:00",
+      "daysActive": 18,
+      "source": "local"
+    },
+    "wymm": {
+      "commits": 2,
+      "firstCommit": "2026-07-23T15:15:18+08:00",
+      "lastCommit": "2026-07-27T23:17:18+08:00",
+      "daysActive": 5,
+      "source": "local"
+    },
+    "return_to_me": {
+      "commits": 22,
+      "firstCommit": "2026-07-24T14:54:05+08:00",
+      "lastCommit": "2026-10-05T23:58:48+08:00",
+      "daysActive": 74,
+      "source": "local"
+    },
+    "our_journey": {
+      "commits": 11,
+      "firstCommit": "2026-08-05T14:19:35+08:00",
+      "lastCommit": "2026-08-07T16:39:57+08:00",
+      "daysActive": 3,
+      "source": "local"
+    },
+    "our_flight": {
+      "commits": 45,
+      "firstCommit": "2026-08-26T16:32:08+08:00",
+      "lastCommit": "2026-10-18T14:48:24+08:00",
+      "daysActive": 53,
+      "source": "local"
+    },
+    "our_gallery": {
+      "commits": 15,
+      "firstCommit": "2026-08-31T21:51:43+08:00",
+      "lastCommit": "2026-10-09T22:51:19+08:00",
+      "daysActive": 40,
+      "source": "local"
+    },
+    "sort_of_us": {
+      "commits": 2,
+      "firstCommit": "2026-09-09T23:41:42+08:00",
+      "lastCommit": "2026-09-10T21:28:13+08:00",
+      "daysActive": 1,
+      "source": "local"
+    },
+    "our_hearts": {
+      "commits": 3,
+      "firstCommit": "2026-09-30T15:52:01+08:00",
+      "lastCommit": "2026-09-30T16:40:12+08:00",
+      "daysActive": 1,
+      "source": "local"
+    },
+    "our_miles": {
+      "commits": 3,
+      "firstCommit": "2026-10-07T14:45:29+08:00",
+      "lastCommit": "2026-10-07T21:01:32+08:00",
+      "daysActive": 1,
+      "source": "local"
+    }
+  }
+}

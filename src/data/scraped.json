@@ -1,0 +1,138 @@
+{
+  "generatedAt": "2026-10-18T08:31:41.325Z",
+  "projects": {
+    "confession": {
+      "url": "https://confession.aleemxnurul.love/",
+      "status": "live",
+      "title": "A little confession 💌",
+      "themeColor": "#fcefe7",
+      "ogImage": null,
+      "captures": {
+        "mobile": "/previews/confession-mobile.webp",
+        "desktop": "/previews/confession-desktop.webp"
+      },
+      "errors": []
+    },
+    "for_her": {
+      "url": "https://foryou.aleemxnurul.love/",
+      "status": "live",
+      "title": "Season 3 — Still Falling for You",
+      "themeColor": "#FFF7ED",
+      "ogImage": "https://seaboiii.github.io/for_her/og.png",
+      "captures": {
+        "mobile": "/previews/for_her-mobile.webp",
+        "desktop": "/previews/for_her-desktop.webp"
+      },
+      "errors": []
+    },
+    "rsvp": {
+      "url": "https://seaboiii.github.io/rsvp/",
+      "status": "draft",
+      "title": "Aleem & Nurul — Wedding Celebration",
+      "themeColor": "#273a2e",
+      "ogImage": "https://seaboiii.github.io/rsvp/social-couple.png",
+      "captures": {
+        "mobile": "/previews/rsvp-mobile.webp",
+        "desktop": "/previews/rsvp-desktop.webp"
+      },
+      "errors": []
+    },
+    "wymm": {
+      "url": "https://wymm.aleemxnurul.love/",
+      "status": "live",
+      "title": "For Nurulain, with love — Aleem",
+      "themeColor": "#102e26",
+      "ogImage": null,
+      "captures": {
+        "mobile": "/previews/wymm-mobile.webp",
+        "desktop": "/previews/wymm-desktop.webp"
+      },
+      "errors": []
+    },
+    "return_to_me": {
+      "url": "https://seaboiii.github.io/return_to_me/",
+      "status": "live",
+      "title": "Return to Me",
+      "themeColor": "#101728",
+      "ogImage": null,
+      "captures": {
+        "mobile": "/previews/return_to_me-mobile.webp",
+        "desktop": "/previews/return_to_me-desktop.webp"
+      },
+      "errors": []
+    },
+    "our_journey": {
+      "url": "https://seaboiii.github.io/our_journey/",
+      "status": "draft",
+      "title": "Aleem & A — Our Journey",
+      "themeColor": "#edf4f8",
+      "ogImage": null,
+      "captures": {
+        "mobile": "/previews/our_journey-mobile.webp",
+        "desktop": "/previews/our_journey-desktop.webp"
+      },
+      "errors": []
+    },
+    "our_flight": {
+      "url": "https://rsvp.aleemxnurul.love/",
+      "status": "live",
+      "title": "Aleem & Nurulain - Wedding Invitation",
+      "themeColor": "#04121B",
+      "ogImage": "https://rsvp.aleemxnurul.love/og.jpg",
+      "captures": {
+        "mobile": "/previews/our_flight-mobile.webp",
+        "desktop": "/previews/our_flight-desktop.webp"
+      },
+      "errors": []
+    },
+    "our_gallery": {
+      "url": "https://gallery.aleemxnurul.love/",
+      "status": "live",
+      "title": "Aleem & Nurulain — Our Wedding Gallery",
+      "themeColor": "#f8f3ea",
+      "ogImage": "https://gallery.aleemxnurul.love/og.png?v=our-wedding",
+      "captures": {
+        "mobile": "/previews/our_gallery-mobile.webp",
+        "desktop": "/previews/our_gallery-desktop.webp"
+      },
+      "errors": []
+    },
+    "sort_of_us": {
+      "url": "https://sortofus.aleemxnurul.love/",
+      "status": "live",
+      "title": "Sort of Us — made for Nurul",
+      "themeColor": "#101526",
+      "ogImage": null,
+      "captures": {
+        "mobile": "/previews/sort_of_us-mobile.webp",
+        "desktop": "/previews/sort_of_us-desktop.webp"
+      },
+      "errors": []
+    },
+    "our_hearts": {
+      "url": "https://seaboiii.github.io/our_hearts/",
+      "status": "live",
+      "title": "our hearts · Aleem & Nurul",
+      "themeColor": "#f7f4ef",
+      "ogImage": null,
+      "captures": {
+        "mobile": "/previews/our_hearts-mobile.webp",
+        "desktop": "/previews/our_hearts-desktop.webp"
+      },
+      "errors": []
+    },
+    "our_miles": {
+      "url": "https://seaboiii.github.io/our_miles/",
+      "status": "live",
+      "title": "Our Miles · Every day, a little closer",
+      "themeColor": "#f7f2e8",
+      "ogImage": null,
+      "captures": {
+        "mobile": "/previews/our_miles-mobile.webp",
+        "desktop": "/previews/our_miles-desktop.webp"
+      },
+      "errors": []
+    }
+  },
+  "failures": []
+}

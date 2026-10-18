@@ -1,0 +1,41 @@
+{
+  "name": "every-star-was-you",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --configLoader runner --host 127.0.0.1",
+    "stats": "node scripts/stats.mjs",
+    "capture": "node scripts/capture.mjs",
+    "assets": "node scripts/assets.mjs",
+    "build": "tsc -b && vite build --configLoader runner",
+    "preview": "vite preview --configLoader runner --host 127.0.0.1",
+    "test:smoke": "playwright test",
+    "audit": "node scripts/audit.mjs",
+    "vault": "node scripts/vault.mjs"
+  },
+  "dependencies": {
+    "@fontsource/caveat": "^5.2.6",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/instrument-serif": "^5.2.6",
+    "gsap": "^3.13.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.56.0",
+    "@types/react": "^18.3.26",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "lighthouse": "^12.8.2",
+    "playwright": "^1.56.0",
+    "sharp": "^0.34.4",
+    "typescript": "~5.9.3",
+    "vite": "^6.4.0"
+  },
+  "allowScripts": {
+    "sharp@0.34.5": true,
+    "esbuild@0.25.12": true
+  }
+}
