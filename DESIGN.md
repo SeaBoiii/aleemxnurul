@@ -248,3 +248,27 @@ in `localStorage` so the seal opens with a hold on her devices afterwards.
 - `private/answer.txt` — the answer, first line (gitignored).
 - `npm run vault` — re-seals `src/data/vault.json`. Run it after editing either file, then
   commit `vault.json`.
+
+## 9. Immersive 3D (November 2026)
+
+The site becomes one scroll-driven flight through a real-time 3D sky. **Strangers get the whole
+flight without answering anything**; only Nurulain's answer adds the words.
+
+**Public (no answer):** the sky opens · the legend of the Weaver Girl and the Cowherd · the
+flight past every star (real star name, month, a looping vignette) · Cygnus, the Swan, swimming
+in the Silver River between them · the sealed envelope: "the rest is only for her."
+
+**After the answer:** the letter, each star's title, note and link, the magpie bridge, the
+finale. Same vault as §8; per-project stats are sealed too (`private/stats.json`).
+
+**Stars.** Aquila (5) → Lyra (6) → Cygnus (3): Fawaris, Sadr and Albireo (the gold-and-blue
+double). A star can carry a `revealOn` date and stays dim and unnamed until then. Aljanah
+stays unlit: the next star. Deneb is still the bridge.
+`src/data/sky.json` is the public catalogue: it names stars, never sites.
+
+**Assets.** Blender builds each key moment with exact composition and exports small glTF models
+(envelope, seal halves, paper plane, magpie). Its renders are the start and end frames for three
+Higgsfield hero clips (FLUX 3 Video, 1080p, 9:16): the river at night, the magpies building the
+bridge, the seal breaking open. On desktop the clips are tall windows floating in the sky.
+
+**Fallback.** `prefers-reduced-motion` or no WebGL → the 2D site above.

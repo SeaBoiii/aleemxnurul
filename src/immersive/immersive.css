@@ -1,0 +1,90 @@
+/* The 3D sky sits fixed behind everything; the chapters scroll over it. */
+.immersive-stage { position: fixed; inset: 0; z-index: 0; background: var(--night-0); }
+.immersive-canvas { width: 100% !important; height: 100% !important; }
+.immersive { position: relative; z-index: 1; }
+
+.im-header { position: fixed; z-index: 20; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: linear-gradient(#04121dcc, #04121d00); pointer-events: none; }
+.im-header > * { pointer-events: auto; }
+.im-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--paper); font-family: 'Instrument Serif', Georgia, serif; font-size: 17px; min-height: 44px; }
+.im-brand img { width: 30px; height: 30px; object-fit: contain; filter: brightness(0) saturate(100%) invert(85%) sepia(20%) saturate(787%) hue-rotate(349deg) brightness(88%); }
+.im-progress { margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .5px; color: #e0cba8c0; }
+.im-info { margin-left: auto; width: 44px; height: 44px; border-radius: 50%; border: 1px solid #d9b47279; background: #04121d66; color: var(--champagne-soft); font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 22px; backdrop-filter: blur(6px); }
+.im-progress + .im-info { margin-left: 0; }
+
+.im-chapter { position: relative; min-height: 100svh; display: flex; align-items: center; justify-content: center; padding: 96px 20px 72px; }
+
+/* Hero: the river clip fills a phone; on desktop it becomes a tall window beside the title. */
+.im-hero { min-height: 112svh; flex-direction: column; justify-content: flex-end; text-align: center; }
+.im-hero-copy { position: relative; max-width: 560px; }
+.im-kicker { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2.4px; color: var(--champagne); margin: 0 0 18px; }
+.im-hero h1 { font-size: clamp(54px, 15vw, 112px); line-height: .95; letter-spacing: -1.5px; margin: 0 0 18px; color: var(--paper); text-shadow: 0 0 40px #04121d; }
+.im-hero h1 em { color: var(--champagne-soft); }
+.im-sub { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 18px; line-height: 1.4; color: #fff6e9c8; margin: 0 auto 26px; max-width: 320px; text-shadow: 0 0 24px #04121d; }
+.im-cue { display: inline-block; color: var(--champagne); font-size: 20px; animation: im-cue 2.4s ease-in-out infinite; }
+@keyframes im-cue { 50% { transform: translateY(8px); opacity: .5; } }
+
+.clip { margin: 0; overflow: hidden; background: #04121d; }
+.clip video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.clip--hero { position: absolute; inset: 0; z-index: -1; -webkit-mask-image: linear-gradient(#000 55%, transparent 100%); mask-image: linear-gradient(#000 55%, transparent 100%); }
+.clip--hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(#04121d00 40%, #04121dcc 85%); }
+.clip--window { width: min(74vw, 340px); aspect-ratio: 9 / 16; border-radius: 22px; border: 1px solid #d9b47240; box-shadow: 0 0 60px #d9b47222, 0 30px 80px #000a; }
+
+/* Legend lines: one sentence per screen, centred over the sky. */
+.im-legend, .im-river, .im-interlude { min-height: 90svh; flex-direction: column; text-align: center; }
+.im-legend-line { font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(30px, 8.4vw, 54px); line-height: 1.12; letter-spacing: -.4px; color: var(--paper); max-width: 620px; margin: 0; text-shadow: 0 0 30px #04121d, 0 0 60px #04121d; }
+.im-small { margin: 18px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.4px; color: #d9b472b8; text-transform: uppercase; }
+
+/* A star's card rides at the bottom of the screen while its star slides past above. */
+.im-star { min-height: 150svh; align-items: flex-end; justify-content: flex-end; }
+.im-card { position: sticky; bottom: 24px; width: min(100%, 380px); margin-top: 55svh; padding: 20px 20px 18px; border-radius: 22px; background: #061a28c4; border: 1px solid #d9b47233; border-top: 2px solid var(--accent, #d9b47266); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 20px 60px #0008; }
+.im-card--left { margin-right: auto; }
+.im-star:not(:has(.im-card--left)) { justify-content: flex-end; }
+.im-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1px; color: var(--champagne); margin: 0 0 8px; }
+.im-card h2 { font-size: 36px; line-height: 1.02; margin: 0 0 6px; color: var(--paper); }
+.im-star-name { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 15px; color: #d9b472d0; margin: 0 0 10px; }
+.im-public { font-size: 13px; line-height: 1.6; color: #fff6e9a8; margin: 0; }
+.im-note { font-family: 'Caveat', cursive; font-size: 23px; line-height: 1.2; color: #fff6e9e6; margin: 0 0 14px; }
+.is-draft .im-card { border-top-style: dashed; border-top-color: var(--draft); }
+.is-draft .im-eyebrow { color: var(--draft); }
+.is-waiting .im-card { opacity: .78; }
+.is-waiting h2 { font-style: italic; color: #c2cfdb; }
+.im-step { display: inline-flex; align-items: center; gap: 14px; min-height: 44px; padding: 10px 18px; border-radius: 99px; background: var(--accent, var(--champagne)); color: #2a2233; font-family: 'Instrument Serif', Georgia, serif; font-size: 18px; }
+.im-step span { font-size: 18px; }
+
+.im-bridge { min-height: 170svh; flex-direction: column; gap: 28px; text-align: center; }
+.im-bridge-copy { max-width: 560px; }
+
+.im-below { position: relative; z-index: 1; background: linear-gradient(#04121d00, #04121dd9 12%, #04121dd9 88%, #04121d00); }
+
+/* The seal: a question only she can answer. */
+.im-seal { min-height: 120svh; flex-direction: column; text-align: center; }
+.im-lock { width: min(100%, 360px); padding: 26px 22px 20px; border-radius: 24px; background: #061a28cc; border: 1px solid #d9b47240; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); margin-top: 42svh; }
+.im-lock h2 { font-size: 34px; line-height: 1.05; margin: 0 0 16px; }
+.im-question { display: block; font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 21px; color: var(--paper); }
+.im-answer-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; border-bottom: 1px solid #d9b47280; }
+.im-answer-row:focus-within { border-color: var(--champagne-soft); }
+.im-answer-row input { flex: 1; min-width: 0; height: 48px; background: transparent; border: 0; color: var(--paper); font-family: 'Caveat', cursive; font-size: 26px; text-align: center; caret-color: var(--champagne); }
+.im-answer-row input:focus { outline: none; }
+.im-answer-row input::placeholder { color: #fff6e95c; }
+.im-answer-row button { flex: 0 0 44px; height: 44px; border-radius: 50%; border: 1px solid #d9b47279; background: transparent; color: var(--champagne-soft); font-size: 18px; }
+.im-answer-row button:disabled { opacity: .35; }
+.im-feedback { min-height: 18px; margin: 12px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #e9d3a6bd; }
+.im-lock:has([aria-invalid='true']) .im-feedback { color: var(--blush); }
+.im-opened { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+
+.im-letter { position: relative; z-index: 1; min-height: 100svh; display: flex; align-items: center; justify-content: center; padding: 60px 16px; }
+.im-finale { position: relative; z-index: 1; }
+.im-footer { position: relative; z-index: 1; text-align: center; padding: 60px 20px 80px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #fff6e980; }
+
+@media (min-width: 900px) {
+  .im-hero { flex-direction: row; justify-content: center; align-items: center; gap: 6vw; text-align: left; }
+  .clip--hero { position: relative; inset: auto; z-index: 0; width: min(30vw, 400px); aspect-ratio: 9 / 16; border-radius: 26px; border: 1px solid #d9b47240; -webkit-mask-image: none; mask-image: none; box-shadow: 0 0 80px #d9b47222; order: 2; }
+  .clip--hero::after { display: none; }
+  .im-hero-copy { order: 1; }
+  .im-sub { margin-left: 0; }
+  .im-card { width: 380px; bottom: 48px; }
+  .im-star { padding-left: 8vw; padding-right: 8vw; }
+  .im-bridge { flex-direction: row; justify-content: center; gap: 6vw; text-align: left; }
+}
+
+@media (prefers-reduced-motion: reduce) { .im-cue { animation: none; } }

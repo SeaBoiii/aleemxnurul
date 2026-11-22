@@ -45,7 +45,7 @@ test('nothing private ships: the build holds only ciphertext',async()=>{
 });
 
 test('a wrong answer keeps the seal shut, the right one opens the letter, fly, trap focus, step inside, and return with visited state',async({page})=>{
-  await page.goto('/');
+  await page.goto('/?classic');
   await expect(page.getByRole('button',{name:'Press and hold to open your letter'})).toHaveCount(0);
   await answerSeal(page,'definitely not it');
   await expect(page.locator('#seal-feedback')).toContainText('not quite',{timeout:10000});
@@ -73,7 +73,7 @@ test('a wrong answer keeps the seal shut, the right one opens the letter, fly, t
 });
 
 test('reduced-motion tap path, info sheet, list view, finale and resilient storage',async({page})=>{
-  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');
+  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/?classic');
   await answerSeal(page);
   await page.getByRole('button',{name:'Show me'}).click();
   await expect(page.getByRole('heading',{name:'Every star was you.'})).toBeVisible();
@@ -81,23 +81,23 @@ test('reduced-motion tap path, info sheet, list view, finale and resilient stora
   await expect(page.getByRole('dialog')).toContainText('The Weaver Girl & the Cowherd');
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'List view'}).click();
-  await expect(page.locator('.project-star')).toHaveCount(11);
+  await expect(page.locator('.project-star')).toHaveCount(14);
   await page.getByRole('button',{name:/Our Flight AUG '26/}).click();
   await expect(page.getByRole('dialog')).toContainText(project('our_flight').hint);
   await page.keyboard.press('Escape');
-  await page.evaluate(()=>localStorage.setItem('visited',JSON.stringify(['confession','for_her','rsvp','wymm','return_to_me','our_journey','our_flight','our_gallery','sort_of_us','our_hearts','our_miles'])));
+  await page.evaluate((ids)=>localStorage.setItem('visited',JSON.stringify(ids)),secret.projects.map((item:{id:string})=>item.id));
   await page.reload();await expect(page.getByText(secret.finale.slice(0,40),{exact:false})).toBeVisible();
   await page.evaluate(()=>{localStorage.setItem('visited','{"broken":true}');});await page.reload();
-  await expect(page.locator('.visited-progress')).toContainText('0 / 11');
+  await expect(page.locator('.visited-progress')).toContainText('0 / 14');
 });
 
 for(const width of [360,390,768,1440]){
   test(`responsive sky, card and accessibility at ${width}px`,async({page})=>{
     await page.setViewportSize({width,height:width>=768?900:844});await page.emulateMedia({reducedMotion:'reduce'});
-    await remembered(page,{'seen-letter':'true'});await page.goto('/');
+    await remembered(page,{'seen-letter':'true'});await page.goto('/?classic');
     await expect(page.getByRole('heading',{name:'Every star was you.'})).toBeVisible();
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-    const buttons=page.locator('.project-star');await expect(buttons).toHaveCount(11);
+    const buttons=page.locator('.project-star');await expect(buttons).toHaveCount(14);
     for(const button of await buttons.all()){const rect=await button.boundingBox();expect(rect).toBeTruthy();expect(rect!.x).toBeGreaterThanOrEqual(0);expect(rect!.x+rect!.width).toBeLessThanOrEqual(width+1);}
     await mkdir('.qa',{recursive:true});await page.screenshot({path:`.qa/sky-${width}.png`});
     if(width===390){const results=await new AxeBuilder({page}).analyze();expect(results.violations).toEqual([]);}
@@ -109,14 +109,14 @@ for(const width of [360,390,768,1440]){
 test('private-mode storage errors do not stop the gift',async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.addInitScript(()=>{Storage.prototype.getItem=()=>{throw new DOMException('Unavailable','SecurityError');};Storage.prototype.setItem=()=>{throw new DOMException('Unavailable','SecurityError');};});
-  await page.goto('/');await answerSeal(page);await page.getByRole('button',{name:'Show me'}).click();await expect(page.getByRole('heading',{name:'Every star was you.'})).toBeVisible();
+  await page.goto('/?classic');await answerSeal(page);await page.getByRole('button',{name:'Show me'}).click();await expect(page.getByRole('heading',{name:'Every star was you.'})).toBeVisible();
 });
 
 test('the actual stars open their own cards, and the sheet drags closed',async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});
   await remembered(page,{'seen-letter':'true'});
-  await page.goto('/');
-  for (const button of await page.locator('.project-star').all()) {
+  await page.goto('/?classic');
+  for (const button of await page.locator('.project-star:not([disabled])').all()) {
     const title=await button.locator('.star-label > span').first().innerText();
     const glyph=await button.locator('.star-glyph').boundingBox();
     await page.mouse.click(glyph!.x+glyph!.width/2,glyph!.y+glyph!.height/2);
@@ -133,7 +133,7 @@ test('the actual stars open their own cards, and the sheet drags closed',async({
 test('love slider refuses less, and visited stars carry little voice memos',async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});
   await remembered(page,{'seen-letter':'true',visited:'["confession"]'});
-  await page.goto('/');
+  await page.goto('/?classic');
   const visited=page.getByRole('button',{name:/A Little Confession.*visited/});
   await visited.hover();await page.mouse.down();await page.waitForTimeout(700);await page.mouse.up();
   await expect(page.getByRole('status')).toContainText(project('confession').note.slice(0,40));
@@ -149,12 +149,47 @@ test('love slider refuses less, and visited stars carry little voice memos',asyn
 
 test('a remembered device opens with a hold',async({page})=>{
   await remembered(page);
-  await page.goto('/');
+  await page.goto('/?classic');
   await expect(page.getByRole('button',{name:'Press and hold to open your letter'})).toBeVisible();
 });
 
 test('a stale saved key falls back to the question',async({page})=>{
   await page.addInitScript(()=>localStorage.setItem('vault-key',JSON.stringify({salt:'old',key:'AAAA'})));
-  await page.goto('/');
+  await page.goto('/?classic');
   await expect(page.getByLabel(vault.question)).toBeVisible();
+});
+
+/* ------------------------------------------------------------------ the 3D flight */
+
+test.describe('immersive flight', () => {
+  test('strangers fly past every star but read nothing private', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('heading', { name: 'Every star was you.' })).toBeVisible();
+    await expect(page.locator('canvas')).toHaveCount(1);
+    await expect(page.locator('.im-star')).toHaveCount(14);
+    await expect(page.locator('.im-star').first()).toContainText('Altair');
+    const text = await page.locator('body').innerText();
+    for (const item of secret.projects) if (item.title.length > 6) expect(text, `${item.title} must stay sealed`).not.toContain(item.title);
+    expect(text).not.toContain(secret.letter.split(/\n/).find((line: string) => line.length > 40).slice(0, 40));
+    await expect(page.locator('.im-star.is-waiting')).toContainText('a star still waiting');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+
+  test('the seal opens her words: titles, notes, the letter and the doors', async ({ page }) => {
+    await page.goto('/');
+    await answerSeal(page, 'definitely not it');
+    await expect(page.locator('#im-feedback')).toContainText('not quite', { timeout: 10000 });
+    await answerSeal(page);
+    await expect(page.getByRole('region', { name: 'Your letter from Aleem' })).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('.im-star').nth(6)).toContainText(project('our_flight').title);
+    await page.locator('.im-star').nth(6).getByRole('button', { name: /Step inside/ }).click();
+    await expect(page.getByRole('dialog')).toContainText(project('our_flight').note.slice(0, 30));
+  });
+
+  test('her phone remembers her: the words are there from the start', async ({ page }) => {
+    await remembered(page);
+    await page.goto('/');
+    await expect(page.locator('.im-star').first()).toContainText(project('confession').title, { timeout: 10000 });
+    await expect(page.locator('.im-progress')).toContainText('/ 14 stars visited');
+  });
 });

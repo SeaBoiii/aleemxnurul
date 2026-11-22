@@ -21,10 +21,13 @@ const catalogue: Omit<SkyStar, 'x' | 'y'>[] = [
   { name: 'ζ¹ Lyrae', designation: 'ζ¹ Lyrae', constellation: 'Lyra', ra: 281.193160, dec: 37.605120 },
   { name: 'ε Lyrae', designation: 'ε Lyrae · the Double Double', constellation: 'Lyra', ra: 281.084775, dec: 39.670126 },
   { name: 'Vega', designation: 'α Lyrae', constellation: 'Lyra', ra: 279.234735, dec: 38.783689 },
+  { name: 'Fawaris', designation: 'δ Cygni', constellation: 'Cygnus', ra: 296.243663, dec: 45.130810 },
+  { name: 'Sadr', designation: 'γ Cygni', constellation: 'Cygnus', ra: 305.557091, dec: 40.256679 },
+  { name: 'Albireo', designation: 'β Cygni · gold and blue', constellation: 'Cygnus', ra: 292.680351, dec: 27.959681 },
   { name: 'Deneb', designation: 'α Cygni', constellation: 'Cygnus', ra: 310.357980, dec: 45.280339 },
 ];
 export const mapWidth = 390;
-export const mapHeight = 570;
+export const mapHeight = 700;
 const radians = (degrees: number) => degrees * Math.PI / 180;
 const rotation = radians(20);
 
@@ -51,15 +54,19 @@ function place(indices: number[], box: { left: number; top: number; width: numbe
     y: Math.round(box.top + box.height / 2 + (p.y - (minY + maxY) / 2) * scale),
   }));
 }
-const aquila = place([0, 1, 2, 3, 4], { left: 34, top: 335, width: 240, height: 205 });
-const lyra = place([5, 6, 7, 8, 9, 10], { left: 140, top: 70, width: 150, height: 205 });
-const positions = [...aquila, ...lyra, { x: 72, y: 92 }];
+const aquila = place([0, 1, 2, 3, 4], { left: 34, top: 465, width: 240, height: 205 });
+const lyra = place([5, 6, 7, 8, 9, 10], { left: 140, top: 200, width: 150, height: 205 });
+// The Swan flies above them, in the river, with Deneb at its tail.
+const cygnus = place([11, 12, 13, 14], { left: 24, top: 46, width: 250, height: 150 });
+const positions = [...aquila, ...lyra, ...cygnus];
 const stars = catalogue.map((star, index) => ({ ...star, ...positions[index] }));
-export const starMap: SkyStar[] = stars.slice(0, 11);
-export const deneb = stars[11];
+export const starMap: SkyStar[] = stars.slice(0, 14);
+export const deneb = stars[14];
 export const points = starMap.map(({ x, y }) => [x, y]);
 // Aquila's spine and wing; Lyra's parallelogram and Vega–ε–ζ triangle.
-export const figureEdges: [number, number][] = [[2, 0], [0, 1], [0, 3], [3, 4], [5, 6], [6, 7], [7, 8], [8, 5], [10, 9], [9, 8], [8, 10]];
+export const figureEdges: [number, number][] = [[2, 0], [0, 1], [0, 3], [3, 4], [5, 6], [6, 7], [7, 8], [8, 5], [10, 9], [9, 8], [8, 10], [11, 12], [12, 13]];
+/** Vega back into the river, to the Swan: the second crossing. */
+export const swanCrossing: [number, number] = [10, 11];
 export const crossing: [number, number] = [4, 5];
 export const linePath = (from: number, to: number) => `M${stars[from].x} ${stars[from].y} L${stars[to].x} ${stars[to].y}`;
 export const summerTriangle = `M${stars[10].x} ${stars[10].y} L${stars[0].x} ${stars[0].y} L${deneb.x} ${deneb.y} Z`;
@@ -75,7 +82,7 @@ export const bridgePoint = (t: number) => ({
 /** Shortest walk along the actual figure lines, with one crossing of the river. */
 export function flightRoute(from: number, to: number): number[] {
   const queue: number[][] = [[from]], seen = new Set([from]);
-  const edges = [...figureEdges, crossing];
+  const edges = [...figureEdges, crossing, swanCrossing];
   while (queue.length) {
     const route = queue.shift()!;
     const node = route[route.length - 1];
@@ -94,4 +101,4 @@ starMap.slice(1).forEach((_, index) => journey.push(...flightRoute(index, index 
 export const arrivalPath = journey.map((index, step) => `${step ? 'L' : 'M'}${starMap[index].x} ${starMap[index].y}`).join(' ');
 
 // Which side of its star each label sits on, tuned so the Lyra cluster never collides.
-export const labelSide: ('left' | 'right' | 'right-low' | 'above' | 'below' | 'below-start')[] = ['right-low', 'above', 'below-start', 'right', 'right', 'below', 'left', 'left', 'below', 'above', 'right'];
+export const labelSide: ('left' | 'right' | 'right-low' | 'above' | 'below' | 'below-start')[] = ['right-low', 'above', 'below-start', 'right', 'right', 'below', 'left', 'left', 'below', 'above', 'right', 'right', 'below', 'right'];

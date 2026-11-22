@@ -16,8 +16,8 @@ const legend = [
   { symbol: '☆', label: "the bridge (unlit until you've found every star)", className: 'legend-bridge' },
 ];
 
-export default function ConstellationInfo({ onClose }: { onClose: () => void }) {
-  const [title, ...paragraphs] = constellationInfo.split('\n\n');
+export default function ConstellationInfo({ onClose, text }: { onClose: () => void; text?: string }) {
+  const [title, ...paragraphs] = (text ?? constellationInfo).split('\n\n');
   // The visual legend uses the exact wording of the final paragraph in §6.
   const story = paragraphs.filter(paragraph => !paragraph.startsWith('Legend:'));
 

@@ -8,3 +8,7 @@ playwright-report/
 .npm-cache/
 tmp/
 private/
+blender/renders/
+blender/*.blend
+blender/*.blend1
+blender/clips/

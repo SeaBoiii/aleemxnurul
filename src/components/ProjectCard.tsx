@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { projects } from '../content';
-import stats from '../data/stats.json';
+import { history, isWaiting, projects } from '../content';
+import sky from '../data/sky.json';
 import scraped from '../data/scraped.json';
 import { useReducedMotion } from '../lib/hooks';
 import Sheet from './Sheet';
-import { starMap } from '../lib/constellation';
 
-type History={commits:number;daysActive:number};
 type Scrape={themeColor?:string|null;captures?:{mobile?:string;desktop?:string}};
 export default function ProjectCard({index,onClose,onChange,onVisit}:{index:number;onClose:()=>void;onChange:(i:number)=>void;onVisit:(id:string)=>void}){
-  const project=projects[index];
-  const data=(stats.projects as Record<string,History>)[project.id];
+  const waiting=projects[index]&&isWaiting(projects[index]);
+  const project=waiting?{...projects[index],title:'a star still waiting',subtitle:'this one opens on 1 January',note:'Not yet, my love. Come back when the year turns.',fact:undefined,hint:undefined}:projects[index];
+  const data=history[project.id];
   const scrape=(scraped.projects as Record<string,Scrape>)[project.id];
   const accent=project.accent||scrape?.themeColor||'#D9B472';
   const reduced=useReducedMotion();
@@ -28,7 +27,7 @@ export default function ProjectCard({index,onClose,onChange,onVisit}:{index:numb
     window.addEventListener('deviceorientation',orient);return()=>window.removeEventListener('deviceorientation',orient);
   },[reduced]);
   const enter=(button:HTMLElement)=>{
-    if(leaving)return;
+    if(leaving||waiting)return;
     onVisit(project.id);setLeaving(true);
     const rect=button.getBoundingClientRect();
     const x=rect.left+rect.width/2,y=rect.top+rect.height/2;
@@ -45,12 +44,12 @@ export default function ProjectCard({index,onClose,onChange,onVisit}:{index:numb
     <div className="project-copy"><p className="eyebrow">NO. {String(index+1).padStart(2,'0')} · {date}</p>{project.status==='draft'&&<span className="draft-badge">DRAFT · NEVER SENT</span>}<h2 id="project-title">{project.title}</h2><p className="project-subtitle">{project.subtitle}</p><div className="project-star-name" data-project-star={index}>✦ <StarName index={index}/></div><div className="project-note"><h3>Why I made it</h3><p>{project.note}</p></div>
       <ul className="stat-chips" aria-label="A few little details"><li>{data?.commits??0} {data?.commits===1?'commit':'commits'}</li><li>{(data?.daysActive??1)<=1?'made in a single day of love':`${data!.daysActive} days of love`}</li>{project.fact&&<li>{project.fact}</li>}</ul>
       {project.hint&&<p className="project-hint">{project.hint}</p>}
-      <button className="step-inside" disabled={leaving} onClick={e=>enter(e.currentTarget)}>Step inside <span aria-hidden="true">→</span></button>
-      <nav className="project-pagination" aria-label="Explore the timeline"><button disabled={index===0||leaving} onClick={()=>onChange(index-1)}>← Previous</button><span>{String(index+1).padStart(2,'0')} / 11</span><button disabled={index===projects.length-1||leaving} onClick={()=>onChange(index+1)}>Next star →</button></nav>
+      {!waiting&&<button className="step-inside" disabled={leaving} onClick={e=>enter(e.currentTarget)}>Step inside <span aria-hidden="true">→</span></button>}
+      <nav className="project-pagination" aria-label="Explore the timeline"><button disabled={index===0||leaving} onClick={()=>onChange(index-1)}>← Previous</button><span>{String(index+1).padStart(2,'0')} / {projects.length}</span><button disabled={index===projects.length-1||leaving} onClick={()=>onChange(index+1)}>Next star →</button></nav>
     </div></div>
   </Sheet><div className="exit-wipe" ref={wipe} aria-hidden="true"><p ref={wipeTitle}>{project.title}</p></div></>;
 }
 function StarName({index}:{index:number}){
-  const star=starMap[index];
+  const star=sky.stars[index];
   return <>{star.name===star.designation?star.name:`${star.name} · ${star.designation}`}</>;
 }

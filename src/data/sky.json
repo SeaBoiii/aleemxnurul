@@ -1,0 +1,234 @@
+{
+  "note": "Public star catalogue. Titles, notes and links live only in the vault; this file names stars, never sites.",
+  "stars": [
+    {
+      "key": "altair",
+      "name": "Altair",
+      "designation": "α Aquilae",
+      "constellation": "Aquila",
+      "ra": 297.695827,
+      "dec": 8.868321,
+      "month": "JUN '26",
+      "status": "live"
+    },
+    {
+      "key": "tarazed",
+      "name": "Tarazed",
+      "designation": "γ Aquilae",
+      "constellation": "Aquila",
+      "ra": 296.564915,
+      "dec": 10.613262,
+      "month": "JUN '26",
+      "status": "live"
+    },
+    {
+      "key": "alshain",
+      "name": "Alshain",
+      "designation": "β Aquilae",
+      "constellation": "Aquila",
+      "ra": 298.828304,
+      "dec": 6.406763,
+      "month": "JUL '26",
+      "status": "draft"
+    },
+    {
+      "key": "delta-aql",
+      "name": "δ Aquilae",
+      "designation": "δ Aquilae",
+      "constellation": "Aquila",
+      "ra": 291.374589,
+      "dec": 3.114779,
+      "month": "JUL '26",
+      "status": "live"
+    },
+    {
+      "key": "okab",
+      "name": "Okab",
+      "designation": "ζ Aquilae",
+      "constellation": "Aquila",
+      "ra": 286.352533,
+      "dec": 13.863477,
+      "month": "JUL '26",
+      "status": "live"
+    },
+    {
+      "key": "sheliak",
+      "name": "Sheliak",
+      "designation": "β Lyrae",
+      "constellation": "Lyra",
+      "ra": 282.519978,
+      "dec": 33.362668,
+      "month": "AUG '26",
+      "status": "draft"
+    },
+    {
+      "key": "sulafat",
+      "name": "Sulafat",
+      "designation": "γ Lyrae",
+      "constellation": "Lyra",
+      "ra": 284.735928,
+      "dec": 32.689557,
+      "month": "AUG '26",
+      "status": "live"
+    },
+    {
+      "key": "delta-lyr",
+      "name": "δ² Lyrae",
+      "designation": "δ² Lyrae",
+      "constellation": "Lyra",
+      "ra": 283.626178,
+      "dec": 36.89862,
+      "month": "AUG '26",
+      "status": "live"
+    },
+    {
+      "key": "zeta-lyr",
+      "name": "ζ¹ Lyrae",
+      "designation": "ζ¹ Lyrae",
+      "constellation": "Lyra",
+      "ra": 281.19316,
+      "dec": 37.60512,
+      "month": "SEP '26",
+      "status": "live"
+    },
+    {
+      "key": "epsilon-lyr",
+      "name": "ε Lyrae",
+      "designation": "ε Lyrae · the Double Double",
+      "constellation": "Lyra",
+      "ra": 281.084775,
+      "dec": 39.670126,
+      "month": "SEP '26",
+      "status": "live"
+    },
+    {
+      "key": "vega",
+      "name": "Vega",
+      "designation": "α Lyrae",
+      "constellation": "Lyra",
+      "ra": 279.234735,
+      "dec": 38.783689,
+      "month": "OCT '26",
+      "status": "live"
+    },
+    {
+      "key": "fawaris",
+      "name": "Fawaris",
+      "designation": "δ Cygni",
+      "constellation": "Cygnus",
+      "ra": 296.243663,
+      "dec": 45.13081,
+      "month": "JAN '27",
+      "status": "live",
+      "revealOn": "2027-01-01T00:00:00+08:00"
+    },
+    {
+      "key": "sadr",
+      "name": "Sadr",
+      "designation": "γ Cygni",
+      "constellation": "Cygnus",
+      "ra": 305.557091,
+      "dec": 40.256679,
+      "month": "NOV '26",
+      "status": "live"
+    },
+    {
+      "key": "albireo",
+      "name": "Albireo",
+      "designation": "β Cygni · gold and blue",
+      "constellation": "Cygnus",
+      "ra": 292.680351,
+      "dec": 27.959681,
+      "month": "NOV '26",
+      "status": "live"
+    }
+  ],
+  "extras": [
+    {
+      "key": "deneb",
+      "name": "Deneb",
+      "designation": "α Cygni",
+      "constellation": "Cygnus",
+      "ra": 310.35798,
+      "dec": 45.280339,
+      "role": "bridge"
+    },
+    {
+      "key": "aljanah",
+      "name": "Aljanah",
+      "designation": "ε Cygni",
+      "constellation": "Cygnus",
+      "ra": 311.552845,
+      "dec": 33.970256,
+      "role": "next"
+    }
+  ],
+  "figures": {
+    "Aquila": [
+      [
+        "alshain",
+        "altair"
+      ],
+      [
+        "altair",
+        "tarazed"
+      ],
+      [
+        "altair",
+        "delta-aql"
+      ],
+      [
+        "delta-aql",
+        "okab"
+      ]
+    ],
+    "Lyra": [
+      [
+        "sheliak",
+        "sulafat"
+      ],
+      [
+        "sulafat",
+        "delta-lyr"
+      ],
+      [
+        "delta-lyr",
+        "zeta-lyr"
+      ],
+      [
+        "zeta-lyr",
+        "sheliak"
+      ],
+      [
+        "vega",
+        "epsilon-lyr"
+      ],
+      [
+        "epsilon-lyr",
+        "zeta-lyr"
+      ],
+      [
+        "zeta-lyr",
+        "vega"
+      ]
+    ],
+    "Cygnus": [
+      [
+        "deneb",
+        "sadr"
+      ],
+      [
+        "sadr",
+        "albireo"
+      ],
+      [
+        "fawaris",
+        "sadr"
+      ],
+      [
+        "sadr",
+        "aljanah"
+      ]
+    ]
+  }
+}

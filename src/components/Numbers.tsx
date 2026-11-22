@@ -15,7 +15,7 @@ export function Numbers() {
   const infinityRef = useRef<SVGPathElement>(null);
   const reducedMotion = useReducedMotion();
   const days = Math.max(0, Math.floor((Date.now() - firstDay) / 86_400_000));
-  const values = [11, stats.totalCommits, days];
+  const values = [stats.websites, stats.totalCommits, days];
   const labels = ['websites', 'commits', 'days of building you things'];
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import gsap from 'gsap';
-import { projects, whispers } from '../content';
+import { isWaiting, projects, whispers } from '../content';
 import scraped from '../data/scraped.json';
 import { arrivalPath, bridgePath, bridgePoint, crossing, deneb, figureEdges, flightRoute, labelSide, linePath, mapHeight, mapWidth, starMap, summerTriangle } from '../lib/constellation';
 import { useReducedMotion } from '../lib/hooks';
@@ -28,7 +28,7 @@ export default function Sky({ visited, onSelect, onReadLetter, onMonogram, onInf
   const current = useRef(0);
   const busy = useRef(false);
   const flight = useRef<gsap.core.Tween>();
-  const complete = projects.every((project) => visited.includes(project.id));
+  const complete = projects.every((project) => visited.includes(project.id) || isWaiting(project));
 
   useEffect(() => {
     if (!fromLetter || reduced) return;
@@ -134,7 +134,7 @@ export default function Sky({ visited, onSelect, onReadLetter, onMonogram, onInf
         <button className="view-toggle" aria-pressed={list} onClick={() => setList(!list)}><span aria-hidden="true">{list ? '✦' : '☷'}</span><span>{list ? 'Sky view' : 'List view'}</span></button>
         <button className="sky-info" aria-label="About this sky" onClick={onInfo}><span aria-hidden="true">i</span></button>
       </div>
-      <div className="visited-progress" aria-label={`${visited.length} / 11 stars visited`}><span className="heart-pips" aria-hidden="true">{projects.map((project) => <span className={visited.includes(project.id) ? 'filled' : ''} key={project.id}>♥</span>)}</span><span>{visited.length} / 11 stars visited</span></div>
+      <div className="visited-progress" aria-label={`${visited.length} / ${projects.length} stars visited`}><span className="heart-pips" aria-hidden="true">{projects.map((project) => <span className={visited.includes(project.id) ? 'filled' : ''} key={project.id}>♥</span>)}</span><span>{visited.length} / {projects.length} stars visited</span></div>
     </header>
     <div className="sky-intro"><p className="sky-eyebrow">A LITTLE UNIVERSE, MADE FOR YOU</p><h1 id="sky-title" tabIndex={-1}>Every star was you.</h1><p>Eleven little worlds, across a river of stars.</p></div>
     <div className={`constellation${list ? ' is-list' : ''}`}>
@@ -150,17 +150,17 @@ export default function Sky({ visited, onSelect, onReadLetter, onMonogram, onInf
           return <g className="magpie" key={i} transform={`translate(${x} ${y})`}><use href="#sky-magpie" x="-7" y="-5" width="14" height="10" /></g>;
         })}</>}
       </svg>
-      {!list && <><div ref={plane} className="sky-plane" style={{ left: `${starMap[0].x / mapWidth * 100}%`, top: `${starMap[0].y / mapHeight * 100}%` }} aria-hidden="true"><img src="/paper-plane.svg" alt="" width="27" height="27" /></div><span className="sky-constellation-name sky-constellation-name--lyra" aria-hidden="true">LYRA</span><span className="sky-constellation-name sky-constellation-name--aquila" aria-hidden="true">AQUILA</span><span className="sky-river-label" aria-hidden="true">the Silver River</span></>}
+      {!list && <><div ref={plane} className="sky-plane" style={{ left: `${starMap[0].x / mapWidth * 100}%`, top: `${starMap[0].y / mapHeight * 100}%` }} aria-hidden="true"><img src="/paper-plane.svg" alt="" width="27" height="27" /></div><span className="sky-constellation-name sky-constellation-name--lyra" aria-hidden="true">LYRA</span><span className="sky-constellation-name sky-constellation-name--aquila" aria-hidden="true">AQUILA</span><span className="sky-constellation-name sky-constellation-name--cygnus" aria-hidden="true">CYGNUS</span><span className="sky-river-label" aria-hidden="true">the Silver River</span></>}
       <ol className="star-list">{projects.map((project, index) => {
         const star = starMap[index], isVisited = visited.includes(project.id);
         const styles = { '--x': `${star.x / mapWidth * 100}%`, '--y': `${star.y / mapHeight * 100}%`, '--phase': `${-index * 0.37}s` } as CSSProperties;
         return <li key={project.id} style={styles} className={`star-position star-${index} label-${labelSide[index]}${project.status === 'draft' ? ' is-draft' : ''}${isVisited ? ' is-visited' : ''}${index === 0 || index === 10 ? ' is-lover' : ''}`}>
-          <button className="project-star" aria-label={`${project.title} ${project.month}${project.status === 'draft' ? ' · draft' : ''}${index === 0 ? ' the Cowherd' : index === 10 ? ' the Weaver Girl' : ''} ${star.name}${isVisited ? ', visited' : ''}`} onClick={() => select(index)} onPointerDown={() => showMemo(index)} onPointerUp={() => clearTimeout(longPress.current)} onPointerCancel={() => clearTimeout(longPress.current)} onPointerLeave={() => { clearTimeout(longPress.current); setPeek((active) => active === index ? null : active); }} onPointerEnter={() => { bankToward(index); if (!list) setPeek(index); }} onFocus={() => { bankToward(index); if (!list) setPeek(index); }} onBlur={() => setPeek((active) => active === index ? null : active)} onKeyDown={(event) => { if (event.shiftKey && event.key === 'Enter' && isVisited) { event.preventDefault(); setMemo(index); } }}>
-            <span className="star-glyph" aria-hidden="true"><span className="star-glyph-visual">{isVisited ? '♥' : '✦'}</span></span><span className="star-label"><span>{project.title}</span>{' '}<span className="star-month">{project.month}{project.status === 'draft' ? ' · draft' : ''}</span>{(index === 0 || index === 10) && <>{' '}<span className="star-lover">{index === 0 ? 'the Cowherd' : 'the Weaver Girl'}</span></>}</span>{' '}<span className="list-star-name">{star.name}</span>{peek === index && <span className="star-preview" aria-hidden="true">{captures[project.id]?.captures?.mobile ? <img src={captures[project.id].captures!.mobile} alt="" onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }} /> : <span className="star-preview-fallback">✦<small>{star.name}</small></span>}</span>}<span className="list-arrow" aria-hidden="true">↗</span>
+          <button className="project-star" disabled={isWaiting(project)} aria-label={`${isWaiting(project) ? 'a star still waiting' : project.title} ${project.month}${project.status === 'draft' ? ' · draft' : ''}${index === 0 ? ' the Cowherd' : index === 10 ? ' the Weaver Girl' : ''} ${star.name}${isVisited ? ', visited' : ''}`} onClick={() => select(index)} onPointerDown={() => showMemo(index)} onPointerUp={() => clearTimeout(longPress.current)} onPointerCancel={() => clearTimeout(longPress.current)} onPointerLeave={() => { clearTimeout(longPress.current); setPeek((active) => active === index ? null : active); }} onPointerEnter={() => { bankToward(index); if (!list) setPeek(index); }} onFocus={() => { bankToward(index); if (!list) setPeek(index); }} onBlur={() => setPeek((active) => active === index ? null : active)} onKeyDown={(event) => { if (event.shiftKey && event.key === 'Enter' && isVisited) { event.preventDefault(); setMemo(index); } }}>
+            <span className="star-glyph" aria-hidden="true"><span className="star-glyph-visual">{isVisited ? '♥' : '✦'}</span></span><span className="star-label"><span>{isWaiting(project) ? 'a star still waiting' : project.title}</span>{' '}<span className="star-month">{project.month}{project.status === 'draft' ? ' · draft' : ''}</span>{(index === 0 || index === 10) && <>{' '}<span className="star-lover">{index === 0 ? 'the Cowherd' : 'the Weaver Girl'}</span></>}</span>{' '}<span className="list-star-name">{star.name}</span>{peek === index && <span className="star-preview" aria-hidden="true">{captures[project.id]?.captures?.mobile ? <img src={captures[project.id].captures!.mobile} alt="" onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }} /> : <span className="star-preview-fallback">✦<small>{star.name}</small></span>}</span>}<span className="list-arrow" aria-hidden="true">↗</span>
           </button>
         </li>;
       })}</ol>
-      {!list && <div className={`deneb${complete ? ' is-lit' : ''}`} style={{ left: `${deneb.x / mapWidth * 100}%`, top: `${deneb.y / mapHeight * 100}%` }} aria-label={complete ? 'Deneb, the bridge, is alight' : 'Deneb, the bridge, waiting for all eleven stars'}><span className="deneb-glyph" aria-hidden="true">{complete ? '✦' : '☆'}</span><span className="deneb-label">Deneb<small>the bridge</small></span></div>}
+      {!list && <div className={`deneb${complete ? ' is-lit' : ''}`} style={{ left: `${deneb.x / mapWidth * 100}%`, top: `${deneb.y / mapHeight * 100}%` }} aria-label={complete ? 'Deneb, the bridge, is alight' : 'Deneb, the bridge, waiting for every star'}><span className="deneb-glyph" aria-hidden="true">{complete ? '✦' : '☆'}</span><span className="deneb-label">Deneb<small>the bridge</small></span></div>}
     </div>
     <div className="sky-bottom"><p className="sky-instruction">{list ? 'eleven little love letters, in order.' : 'tap a star. they all lead back to you.'}</p><button className="sky-read-letter" onClick={onReadLetter}>read the letter again <span aria-hidden="true">↗</span></button><a className="scroll-cue" href="#numbers">there’s more down here <span aria-hidden="true">↓</span></a></div>
     {shooting && <button ref={shootingStar} className="shooting-star" aria-label="Catch a shooting star" onClick={(event) => { burstHearts(event.clientX, event.clientY, 12); setWhisper(whispers[Math.floor(Math.random() * whispers.length)]); setShooting(false); }}><span aria-hidden="true">✦</span></button>}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import '@fontsource/instrument-serif/latin-400.css';
 import '@fontsource/instrument-serif/latin-400-italic.css';
@@ -10,9 +10,18 @@ import StarField from './components/StarField';
 import { unlockRemembered } from './lib/vault';
 import './styles.css';
 
+const Immersive = lazy(() => import('./immersive/Immersive'));
+
+/** The 3D flight needs WebGL and a visitor who hasn't asked for less motion. ?classic forces 2D. */
+function canFly() {
+  if (new URLSearchParams(location.search).has('classic')) return false;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+  try { return !!document.createElement('canvas').getContext('webgl2'); } catch { return false; }
+}
+
 type Gate = 'checking' | 'locked' | 'unlocked' | 'remembered';
 
-/** Nothing of the story exists on the page until the vault is open. */
+/** The 2D sky: nothing of the story exists on the page until the vault is open. */
 function Root() {
   const [gate, setGate] = useState<Gate>('checking');
   useEffect(() => { unlockRemembered().then((ok) => setGate(ok ? 'remembered' : 'locked')); }, []);
@@ -21,4 +30,5 @@ function Root() {
   return <App startAtLetter={gate === 'unlocked'} />;
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><Root /></React.StrictMode>);
+const app = canFly() ? <Suspense fallback={<StarField active />}><Immersive /></Suspense> : <Root />;
+ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode>{app}</React.StrictMode>);

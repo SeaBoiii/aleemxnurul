@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { projects } from './content';
+import { isWaiting, projects } from './content';
 import { readStorage, writeStorage } from './lib/storage';
 import { Seal } from './components/Seal';
 import { Letter } from './components/Letter';
@@ -95,7 +95,7 @@ export default function App({ startAtLetter = false }: { startAtLetter?: boolean
         <Numbers />
         <LoveSlider onBurst={burstHearts} />
         <Countdown />
-        <Finale complete={visited.length === projects.length} />
+        <Finale complete={projects.every((project) => visited.includes(project.id) || isWaiting(project))} />
       </div>
     </main>}
     {selected !== null && <ProjectCard index={selected} onClose={() => setSelected(null)} onChange={setSelected} onVisit={visit} />}

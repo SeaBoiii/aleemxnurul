@@ -32,6 +32,12 @@ const base64 = (bytes) => Buffer.from(bytes).toString('base64');
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (!existsSync(contentFile)) throw new Error('Missing private/content.json.');
   const { question, ...content } = JSON.parse(await readFile(contentFile, 'utf8'));
+  const statsFile = resolve(root, 'private/stats.json');
+  // Per-project history names every repository, so it travels inside the vault too.
+  if (existsSync(statsFile)) content.stats = JSON.parse(await readFile(statsFile, 'utf8')).projects;
+  const sky = JSON.parse(await readFile(resolve(root, 'src/data/sky.json'), 'utf8'));
+  const mismatch = content.projects.findIndex((project, index) => project.star !== sky.stars[index]?.key);
+  if (mismatch >= 0 || content.projects.length !== sky.stars.length) throw new Error(`private/content.json and src/data/sky.json disagree at star ${mismatch + 1}.`);
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const key = await deriveKey(await readAnswer(), salt);

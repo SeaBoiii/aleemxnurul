@@ -1,10 +1,11 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const repositories = ['confession', 'for_her', 'rsvp', 'wymm', 'return_to_me', 'our_journey', 'our_flight', 'our_gallery', 'sort_of_us', 'our_hearts', 'our_miles'];
+// The repository list is private too (one repo is a surprise), so it comes from the vault's source.
+const repositories = JSON.parse(readFileSync(resolve(root, 'private/content.json'), 'utf8')).projects.map((project) => project.repo);
 const projects = {};
 
 function gitDates(folder) {
@@ -41,6 +42,10 @@ for (const repo of repositories) {
 }
 
 const output = { generatedAt: new Date().toISOString(), totalCommits: Object.values(projects).reduce((sum, project) => sum + project.commits, 0), projects };
-mkdirSync(resolve(root, 'src/data'), { recursive: true });
-writeFileSync(resolve(root, 'src/data/stats.json'), JSON.stringify(output, null, 2) + '\n');
-console.log(`Wrote src/data/stats.json (${output.totalCommits} total commits).`);
+// Per-project history names every repository (one of them private), so it is sealed into the
+// vault with the rest of the story. Only the totals are public.
+mkdirSync(resolve(root, 'private'), { recursive: true });
+writeFileSync(resolve(root, 'private/stats.json'), JSON.stringify(output, null, 2) + '\n');
+const firstCommit = Object.values(projects).map((project) => project.firstCommit).filter(Boolean).sort()[0] ?? null;
+writeFileSync(resolve(root, 'src/data/stats.json'), JSON.stringify({ generatedAt: output.generatedAt, websites: repositories.length, totalCommits: output.totalCommits, firstCommit }, null, 2) + '\n');
+console.log(`Wrote private/stats.json and src/data/stats.json (${output.totalCommits} total commits).`);
