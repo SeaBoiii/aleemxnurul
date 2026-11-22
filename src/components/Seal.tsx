@@ -3,6 +3,8 @@ import type { FormEvent, KeyboardEvent, PointerEvent } from 'react';
 import gsap from 'gsap';
 import { useReducedMotion } from '../lib/hooks';
 import { question, unlock } from '../lib/vault';
+import { countWord } from '../lib/words';
+import stats from '../data/stats.json';
 import './opening.css';
 
 type SealProps = { onOpen: () => void; locked?: boolean };
@@ -204,7 +206,7 @@ export function Seal({ onOpen, locked = false }: SealProps) {
         </div>
         <p id="seal-feedback" className="seal-feedback" role="status">{isOpening ? 'it’s you. welcome home ♡' : checking ? 'the seal is listening…' : misses ? gentleNos[(misses - 1) % gentleNos.length] : 'answer, and the seal will know it’s you'}</p>
       </form> : <p id="seal-instruction" className="opening-hold-hint">{isOpening ? 'a little something, just for you' : reducedMotion ? 'tap the seal to open' : 'press & hold the seal'}<span aria-hidden="true">♡</span></p>}
-      <p className="opening-signature">eleven little worlds. one favourite person.</p>
+      <p className="opening-signature">{countWord(stats.websites)} little worlds. one favourite person.</p>
     </section>
   );
 }

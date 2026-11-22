@@ -5,6 +5,7 @@ import { isWaiting, projects, whispers } from '../content';
 import scraped from '../data/scraped.json';
 import { arrivalPath, bridgePath, bridgePoint, crossing, deneb, figureEdges, flightRoute, labelSide, linePath, mapHeight, mapWidth, starMap, summerTriangle } from '../lib/constellation';
 import { useReducedMotion } from '../lib/hooks';
+import { capitalised, countWord } from '../lib/words';
 import { burstHearts } from './StarField';
 import './sky.css';
 
@@ -136,7 +137,7 @@ export default function Sky({ visited, onSelect, onReadLetter, onMonogram, onInf
       </div>
       <div className="visited-progress" aria-label={`${visited.length} / ${projects.length} stars visited`}><span className="heart-pips" aria-hidden="true">{projects.map((project) => <span className={visited.includes(project.id) ? 'filled' : ''} key={project.id}>♥</span>)}</span><span>{visited.length} / {projects.length} stars visited</span></div>
     </header>
-    <div className="sky-intro"><p className="sky-eyebrow">A LITTLE UNIVERSE, MADE FOR YOU</p><h1 id="sky-title" tabIndex={-1}>Every star was you.</h1><p>Eleven little worlds, across a river of stars.</p></div>
+    <div className="sky-intro"><p className="sky-eyebrow">A LITTLE UNIVERSE, MADE FOR YOU</p><h1 id="sky-title" tabIndex={-1}>Every star was you.</h1><p>{capitalised(projects.length)} little worlds, across a river of stars.</p></div>
     <div className={`constellation${list ? ' is-list' : ''}`}>
       <svg className="constellation-lines" viewBox={`0 0 ${mapWidth} ${mapHeight}`} aria-hidden="true">
         <defs><symbol id="sky-magpie" viewBox="-12 -7 24 14"><path d="M-11 1 Q-6-8 0 0 Q6-8 11 1 M0 0 L-2 6 M0 0 L3 5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></symbol><mask id="arrival-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={mapWidth} height={mapHeight}><path className="arrival-mask-line" d={arrivalPath} stroke="white" strokeWidth="3" pathLength="1" /></mask></defs>
@@ -162,7 +163,7 @@ export default function Sky({ visited, onSelect, onReadLetter, onMonogram, onInf
       })}</ol>
       {!list && <div className={`deneb${complete ? ' is-lit' : ''}`} style={{ left: `${deneb.x / mapWidth * 100}%`, top: `${deneb.y / mapHeight * 100}%` }} aria-label={complete ? 'Deneb, the bridge, is alight' : 'Deneb, the bridge, waiting for every star'}><span className="deneb-glyph" aria-hidden="true">{complete ? '✦' : '☆'}</span><span className="deneb-label">Deneb<small>the bridge</small></span></div>}
     </div>
-    <div className="sky-bottom"><p className="sky-instruction">{list ? 'eleven little love letters, in order.' : 'tap a star. they all lead back to you.'}</p><button className="sky-read-letter" onClick={onReadLetter}>read the letter again <span aria-hidden="true">↗</span></button><a className="scroll-cue" href="#numbers">there’s more down here <span aria-hidden="true">↓</span></a></div>
+    <div className="sky-bottom"><p className="sky-instruction">{list ? `${countWord(projects.length)} little love letters, in order.` : 'tap a star. they all lead back to you.'}</p><button className="sky-read-letter" onClick={onReadLetter}>read the letter again <span aria-hidden="true">↗</span></button><a className="scroll-cue" href="#numbers">there’s more down here <span aria-hidden="true">↓</span></a></div>
     {shooting && <button ref={shootingStar} className="shooting-star" aria-label="Catch a shooting star" onClick={(event) => { burstHearts(event.clientX, event.clientY, 12); setWhisper(whispers[Math.floor(Math.random() * whispers.length)]); setShooting(false); }}><span aria-hidden="true">✦</span></button>}
     {whisper && <button className="whisper-bubble" onClick={() => setWhisper('')} aria-label={`A whisper: ${whisper}. Dismiss`}>{whisper} <span aria-hidden="true">♡</span></button>}
     {memo !== null && <div className="memo-bubble" role="status"><span className="sky-eyebrow">▸ A LITTLE NOTE FROM ALEEM</span><div className="memo-wave" aria-hidden="true">▂ ▅ ▃ ▇ ▄ ▂ ▆ ▄ ▇ ▂ ▅ ▃</div><p>{projects[memo].note}</p><button className="sky-read-letter" onClick={() => setMemo(null)}>close note</button></div>}

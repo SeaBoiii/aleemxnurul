@@ -48,7 +48,7 @@
 .is-draft .im-eyebrow { color: var(--draft); }
 .is-waiting .im-card { opacity: .78; }
 .is-waiting h2 { font-style: italic; color: #c2cfdb; }
-.im-step { display: inline-flex; align-items: center; gap: 14px; min-height: 44px; padding: 10px 18px; border-radius: 99px; background: var(--accent, var(--champagne)); color: #2a2233; font-family: 'Instrument Serif', Georgia, serif; font-size: 18px; }
+.im-step { display: inline-flex; align-items: center; gap: 14px; min-height: 44px; padding: 10px 18px; border-radius: 99px; background: var(--accent, var(--champagne)); color: var(--accent-ink, #2a2233); font-family: 'Instrument Serif', Georgia, serif; font-size: 18px; }
 .im-step span { font-size: 18px; }
 
 .im-bridge { min-height: 170svh; flex-direction: column; gap: 28px; text-align: center; }
@@ -73,7 +73,8 @@
 .im-opened { display: flex; flex-direction: column; align-items: center; gap: 18px; }
 
 .im-letter { position: relative; z-index: 1; min-height: 100svh; display: flex; align-items: center; justify-content: center; padding: 60px 16px; }
-.im-finale { position: relative; z-index: 1; }
+.im-finale { position: relative; z-index: 1; background: linear-gradient(#04121d00, #04121df0 14%, #04121df0 86%, #04121d00); }
+.im-letter { background: radial-gradient(ellipse at center, #04121dcc 30%, #04121d00 75%); }
 .im-footer { position: relative; z-index: 1; text-align: center; padding: 60px 20px 80px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #fff6e980; }
 
 @media (min-width: 900px) {

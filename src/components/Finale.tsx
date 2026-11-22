@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+import stats from '../data/stats.json';
+import { capitalised, roman } from '../lib/words';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { finale } from '../content';
@@ -30,13 +32,13 @@ export function Finale({ complete }: FinaleProps) {
 
   return (
     <section className={`finale-section lower-scene${complete ? ' is-complete' : ''}`} aria-labelledby="finale-heading">
-      <div className="twelfth-star" role="img" aria-label={complete ? 'Deneb, the twelfth star, is shining. You found every star.' : 'Deneb, the twelfth star, waiting to shine'}>
+      <div className="twelfth-star" role="img" aria-label={complete ? 'Deneb, the bridge, is shining. You found every star.' : 'Deneb, the bridge, waiting to shine'}>
         <span className="twelfth-star-halo" />
         <svg viewBox="0 0 80 80" aria-hidden="true"><path d="M40 4 48 32 76 40 48 48 40 76 32 48 4 40 32 32Z" /></svg>
-        <span className="twelfth-star-number" aria-hidden="true">XII</span>
+        <span className="twelfth-star-number" aria-hidden="true">{roman(stats.websites + 1)}</span>
       </div>
-      <p className="eyebrow">DENEB · THE TWELFTH STAR</p>
-      <h2 id="finale-heading">Eleven websites.<br /><em>And the twelfth star?</em></h2>
+      <p className="eyebrow">DENEB · THE BRIDGE</p>
+      <h2 id="finale-heading">{capitalised(stats.websites)} websites.<br /><em>And the last star?</em></h2>
       <p className="finale-closing">That one's the bridge, our whole life,<br />still being written.</p>
       {complete && (
         <div className="finale-note" ref={noteRef}>

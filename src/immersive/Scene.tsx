@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import {
   AdditiveBlending, BufferAttribute, BufferGeometry, Color, Group, MathUtils, Mesh, MeshStandardMaterial,
-  Object3D, PlaneGeometry, Points, ShaderMaterial, SRGBColorSpace, Texture, TextureLoader, Vector3, VideoTexture,
+  Object3D, PlaneGeometry, Points, Quaternion, ShaderMaterial, SRGBColorSpace, Texture, TextureLoader, Vector3, VideoTexture,
 } from 'three';
 import { aljanah, deneb, figureLines, positionOf, river, route, sealPoint, starT, stars } from './world';
 import { flight } from './flight';
@@ -30,7 +30,7 @@ const pointVertex = /* glsl */ `
     gl_Position = projectionMatrix * mv;
     vTwinkle = 0.75 + 0.25 * sin(time * (0.6 + phase * 1.7) + phase * 40.0);
     float s = size * pixelRatio * vTwinkle;
-    gl_PointSize = attenuate > 0.5 ? clamp(s * (reach / -mv.z), 1.5, 900.0) : s;
+    gl_PointSize = attenuate > 0.5 ? clamp(s * (reach / -mv.z), 1.5, 420.0) : s;
     // Fade what passes very close, so dust never becomes a blurry ball across the lens.
     vTint = tint * (nearFade.y > 0.0 ? smoothstep(nearFade.x, nearFade.y, -mv.z) : 1.0);
   }
@@ -383,13 +383,29 @@ function Envelope({ open }: { open: boolean }) {
     return copy;
   }, [gltf, open]);
   const ref = useRef<Group>(null);
-  useFrame((state) => {
-    if (!ref.current) return;
-    ref.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.4) * 0.12;
-    ref.current.position.y = sealPoint.y + 2.1 + Math.sin(state.clock.elapsedTime * 0.8) * 0.15;
+  const { camera } = useThree();
+  const ahead = useMemo(() => new Vector3(), []);
+  const sway = useMemo(() => new Quaternion(), []);
+  const grow = useRef(0);
+  useFrame((state, dt) => {
+    const group = ref.current;
+    if (!group) return;
+    // Framed to the viewer, like the star windows: centred in the upper half of the screen,
+    // a fixed distance ahead, and only while the seal chapter is on screen.
+    grow.current = MathUtils.damp(grow.current, flight.sealVisible ? 1 : 0, 4, Math.min(dt, 0.1));
+    group.visible = grow.current > 0.01;
+    if (!group.visible) return;
+    const wide = (camera as unknown as { aspect: number }).aspect > 1;
+    camera.getWorldDirection(ahead);
+    group.position.copy(camera.position).addScaledVector(ahead, 6);
+    group.position.add(new Vector3(0, wide ? 0.85 : 1.2, 0).applyQuaternion(camera.quaternion));
+    group.position.y += Math.sin(state.clock.elapsedTime * 0.8) * 0.06;
+    sway.setFromAxisAngle(new Vector3(0, 1, 0), Math.sin(state.clock.elapsedTime * 0.4) * 0.14);
+    group.quaternion.copy(camera.quaternion).multiply(sway);
+    group.scale.setScalar((wide ? 0.72 : 0.55) * (0.8 + 0.2 * grow.current));
   });
   if (!closed) return null;
-  return <group ref={ref} position={sealPoint} scale={0.72}>
+  return <group ref={ref} visible={false}>
     <primitive object={closed} />
     <pointLight position={[0, 0.5, 3]} intensity={open ? 60 : 18} distance={14} color="#ffd9a0" />
   </group>;
@@ -443,7 +459,8 @@ export default function Scene({ unlocked, visited, hiddenUntil, opened }: { unlo
     <ProjectStars unlocked={unlocked} visited={visited} hiddenUntil={hiddenUntil} />
     <StarWindows />
     <PaperPlane />
-    <Envelope open={opened} />
+    {/* Once opened, the seal film tells that moment; the 3D envelope steps aside. */}
+    {!opened && <Envelope open={false} />}
     <CameraRig />
   </Canvas>;
 }

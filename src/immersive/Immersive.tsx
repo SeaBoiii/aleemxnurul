@@ -14,6 +14,7 @@ import Finale from '../components/Finale';
 import { burstHearts } from '../components/StarField';
 import { flight } from './flight';
 import { canStream } from './network';
+import { capitalised } from '../lib/words';
 import { crossingT, denebT, starT, stars } from './world';
 import { legend, starFacts } from './publicCopy';
 import '../components/lower-scenes.css';
@@ -108,6 +109,15 @@ export default function Immersive() {
   const openLetter = useCallback(() => setReading((n) => n + 1), []);
   useFlightScroll(root);
 
+  // The 3D envelope shows only while the seal chapter is on screen.
+  useEffect(() => {
+    const seal = document.getElementById('seal');
+    if (!seal) return;
+    const io = new IntersectionObserver(([entry]) => { flight.sealVisible = entry.isIntersecting; }, { threshold: 0.3 });
+    io.observe(seal);
+    return () => { io.disconnect(); flight.sealVisible = false; };
+  }, []);
+
   // Scroll to the letter once it is actually on the page.
   useEffect(() => {
     if (reading > 0) document.getElementById('letter')?.scrollIntoView({ behavior: 'smooth' });
@@ -167,7 +177,7 @@ export default function Immersive() {
         <div className="im-hero-copy">
           <p className="im-kicker">A LITTLE UNIVERSE · ALL FOR HER</p>
           <h1>Every star <em>was you.</em></h1>
-          <p className="im-sub">{stars.length} little worlds, made one at a time. Scroll, and follow the paper plane.</p>
+          <p className="im-sub">{capitalised(stars.length)} little worlds, made one at a time. Scroll, and follow the paper plane.</p>
           <span className="im-cue" aria-hidden="true">↓</span>
         </div>
       </section>
@@ -189,7 +199,7 @@ export default function Immersive() {
             <p className="im-small">Cygnus · where every new star joins the bridge</p>
           </section>}
           <section className={`im-chapter im-star${s.status === 'draft' ? ' is-draft' : ''}${waiting ? ' is-waiting' : ''}`} data-t={starT[i].toFixed(4)} data-star={i}>
-            <article className={`im-card${i % 2 ? ' im-card--left' : ''}`} style={p ? { ['--accent' as string]: p.accent } : undefined}>
+            <article className={`im-card${i % 2 ? ' im-card--left' : ''}`} style={p ? { ['--accent' as string]: p.accent, ['--accent-ink' as string]: inkOn(p.accent) } : undefined}>
               <p className="im-eyebrow">№ {String(i + 1).padStart(2, '0')} · {s.month}{s.status === 'draft' ? ' · draft' : ''}</p>
               <h2>{waiting ? 'a star still waiting' : p ? p.title : s.name}</h2>
               <p className="im-star-name">{waiting ? 'opens on 1 January' : `${s.name === s.designation ? s.name : `${s.name} · ${s.designation}`} · ${s.constellation}`}</p>
@@ -245,6 +255,12 @@ export default function Immersive() {
     {selected !== null && unlocked && <ProjectCard index={selected} onClose={() => setSelected(null)} onChange={setSelected} onVisit={visit} />}
     {info && (unlocked ? <ConstellationInfo onClose={() => setInfo(false)} /> : <PublicInfo onClose={() => setInfo(false)} />)}
   </>;
+}
+
+/** Readable text on an accent: paper on dark accents (navy), ink on light ones. */
+function inkOn(hex: string) {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b < 0.18 ? '#FFF6E9' : '#2A2233';
 }
 
 function PublicInfo({ onClose }: { onClose: () => void }) {

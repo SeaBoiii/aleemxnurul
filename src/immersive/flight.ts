@@ -13,6 +13,8 @@ export const flight = {
   focus: null as Vector3 | null,
   /** Deneb lights once the bridge chapter has been reached. */
   bridgeLit: false,
+  /** True while the seal chapter is on screen: the envelope only appears then. */
+  sealVisible: false,
 };
 
 // Visual QA and tests jump the camera with window.__flight.t = window.__flight.target = x.

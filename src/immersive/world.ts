@@ -65,7 +65,8 @@ const last = stars[stars.length - 1].position.z;
 /** Deneb, the bridge, and Aljanah, the next star, sit beyond the last site, inside the river. */
 export const deneb = new Vector3(4, 9, last - 46);
 export const aljanah = new Vector3(19, 1, last - 14);
-export const sealPoint = new Vector3(0, 6, deneb.z - 34);
+// Above the river, not in it: the last view is clear sky, not a lens full of dust.
+export const sealPoint = new Vector3(-4, 22, deneb.z - 26);
 
 /** Lines of each figure, by star key. */
 export const figureLines: [string, string][] = Object.values(sky.figures).flat() as [string, string][];
