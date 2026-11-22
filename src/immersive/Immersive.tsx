@@ -102,8 +102,16 @@ export default function Immersive() {
   const [answer, setAnswer] = useState('');
   const [checking, setChecking] = useState(false);
   const [misses, setMisses] = useState(0);
-  const [letterOpen, setLetterOpen] = useState(false);
+  // Each reading is a fresh letter: once it folds into the plane and flies, it leaves the page,
+  // and the next "Read your letter" mounts a new one (a flown letter stays transparent).
+  const [reading, setReading] = useState(0);
+  const openLetter = useCallback(() => setReading((n) => n + 1), []);
   useFlightScroll(root);
+
+  // Scroll to the letter once it is actually on the page.
+  useEffect(() => {
+    if (reading > 0) document.getElementById('letter')?.scrollIntoView({ behavior: 'smooth' });
+  }, [reading]);
 
   useEffect(() => { unlockRemembered().then((ok) => { if (ok) { setUnlocked(true); setOpened(true); } }); }, []);
 
@@ -137,8 +145,7 @@ export default function Immersive() {
     setUnlocked(true);
     setOpened(true);
     burstHearts(innerWidth / 2, innerHeight / 2, 16);
-    setLetterOpen(true);
-    requestAnimationFrame(() => document.getElementById('letter')?.scrollIntoView({ behavior: 'smooth' }));
+    openLetter();
   }
 
   const project = (i: number) => (unlocked ? projects[i] : undefined);
@@ -223,12 +230,12 @@ export default function Immersive() {
         </form> : <div className="im-opened">
           <Clip src="/media/h3-seal.mp4" poster="/media/h3-seal.webp" label="The wax seal breaking and the envelope opening with light" className="clip--window" />
           <p className="im-kicker">IT’S YOU. WELCOME HOME</p>
-          <button className="im-step" onClick={() => { setLetterOpen(true); requestAnimationFrame(() => document.getElementById('letter')?.scrollIntoView({ behavior: 'smooth' })); }}>Read your letter <span aria-hidden="true">→</span></button>
+          <button className="im-step" onClick={openLetter}>Read your letter <span aria-hidden="true">→</span></button>
         </div>}
       </section>
 
-      {unlocked && letterOpen && <div className="im-letter" id="letter">
-        <Letter onComplete={() => { writeStorage('seen-letter', true); scrollTo({ top: 0, behavior: 'smooth' }); }} />
+      {unlocked && reading > 0 && <div className="im-letter" id="letter">
+        <Letter key={reading} onComplete={() => { writeStorage('seen-letter', true); setReading(0); scrollTo({ top: 0, behavior: 'smooth' }); }} />
       </div>}
 
       {unlocked && <section className="im-finale"><Finale complete={complete} /></section>}

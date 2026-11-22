@@ -186,6 +186,21 @@ test.describe('immersive flight', () => {
     await expect(page.getByRole('dialog')).toContainText(project('our_flight').note.slice(0, 30));
   });
 
+  test('the letter can be read again after it flies away', async ({ page }) => {
+    await remembered(page);
+    await page.goto('/');
+    const read = page.getByRole('button', { name: /Read your letter/ });
+    for (let time = 1; time <= 2; time++) {
+      await read.click();
+      const letter = page.getByRole('region', { name: 'Your letter from Aleem' });
+      await expect(letter, `reading ${time}`).toBeVisible();
+      await expect(letter).toHaveCSS('opacity', '1');
+      await expect(letter.locator('.letter-paper')).toBeInViewport();
+      await letter.getByRole('button', { name: 'Show me' }).click();
+      await expect.poll(() => page.evaluate(() => scrollY), { timeout: 10000 }).toBeLessThan(50);
+    }
+  });
+
   test('her phone remembers her: the words are there from the start', async ({ page }) => {
     await remembered(page);
     await page.goto('/');
